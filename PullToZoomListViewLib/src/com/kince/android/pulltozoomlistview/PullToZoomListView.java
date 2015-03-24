@@ -42,20 +42,18 @@ public class PullToZoomListView extends ListView implements
 	private boolean mZoomable = true;
 
 	public PullToZoomListView(Context paramContext) {
-		super(paramContext);
-		init(paramContext);
+		this(paramContext,null);
 	}
 
 	public PullToZoomListView(Context paramContext,
 			AttributeSet paramAttributeSet) {
-		super(paramContext, paramAttributeSet);
-		init(paramContext);
+		this(paramContext, paramAttributeSet,0);
 	}
 
 	public PullToZoomListView(Context paramContext,
 			AttributeSet paramAttributeSet, int paramInt) {
 		super(paramContext, paramAttributeSet, paramInt);
-		init(paramContext);
+		init(paramContext,paramAttributeSet);
 	}
 
 	private void endScraling() {
@@ -64,13 +62,14 @@ public class PullToZoomListView extends ListView implements
 		this.mScalingRunnalable.startAnimation(200L);
 	}
 
-	private void init(Context paramContext) {
+	private void init(Context paramContext,AttributeSet paramAttributeSet) {
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		((Activity) paramContext).getWindowManager().getDefaultDisplay()
 				.getMetrics(localDisplayMetrics);
 		this.mScreenHeight = localDisplayMetrics.heightPixels;
 		this.mHeaderContainer = new FrameLayout(paramContext);
 		this.mHeaderImage = new ImageView(paramContext);
+        setBackgroundAttribute(paramAttributeSet);
 		int i = localDisplayMetrics.widthPixels;
 		setHeaderViewSize(i, (int) (9.0F * (i / 16.0F)));
 		this.mShadow = new ImageView(paramContext);
@@ -85,7 +84,24 @@ public class PullToZoomListView extends ListView implements
 		super.setOnScrollListener(this);
 	}
 
-	private void onSecondaryPointerUp(MotionEvent paramMotionEvent) {
+	/**
+     * 方法描述：添加一个控件的参数，可以在布局文件中直接通过headbackground 参数设置背景
+     * 例如 headbackground="@drawable/aa"
+     * @author lord19871207
+     * @Title: setBackgroundAttribute
+     * @return void
+     * @date 2015-3-23 下午9:40:41
+     * 
+     */
+    private void setBackgroundAttribute(AttributeSet paramAttributeSet) {
+        int resourceId=paramAttributeSet.getAttributeResourceValue(null, "headbackground",0);
+        if(resourceId==0){
+            resourceId=paramAttributeSet.getAttributeResourceValue(null, "headbackground",R.drawable.ic_launcher);
+        }
+        mHeaderImage.setBackgroundResource(resourceId);
+    }
+
+    private void onSecondaryPointerUp(MotionEvent paramMotionEvent) {
 		int i = (paramMotionEvent.getAction()) >> 8;
 		Log.d("onSecondaryPointerUp", i + "");
 		if (paramMotionEvent.getPointerId(i) == this.mActivePointerId)
