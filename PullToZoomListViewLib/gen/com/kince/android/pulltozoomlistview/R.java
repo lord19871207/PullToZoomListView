@@ -25,7 +25,8 @@ public final class R {
         public static int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static int ic_launcher=0x7f020000;
+        public static int aa=0x7f020000;
+        public static int ic_launcher=0x7f020001;
     }
     public static final class id {
         public static int action_settings=0x7f080000;
